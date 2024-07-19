@@ -1,0 +1,21 @@
+{
+    "name": "jeffho/hk-aws-s3",
+    "description": "A package for AWS S3 integration",
+    "type": "library",
+    "require": {
+        "aws/aws-sdk-php": "^3.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jeffho\\HkAwsS3\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jeff Ho",
+            "email": "jeffho@weblisher.com.tw"
+        }
+    ],
+    "minimum-stability": "stable"
+}
