@@ -31,24 +31,31 @@ class AWSS3Handler
      * 列出存储桶中的对象
      *
      * @param S3Client $client S3 客户端
-     * @param string $bucket 存储桶名称
+     * @param string $key 配置键
      * @param string|null $prefix 前缀
      * @return \stdClass 返回包含对象列表或错误信息的响应对象
      */
-    public function listObjects(S3Client $client, string $bucket, ?string $prefix = null): \stdClass
+    public function listObjects(S3Client $client, string $key, ?string $prefix = null): \stdClass
     {
         $response = new \stdClass();
         try {
+            $config = $this->getConfig($key);
+            if (!isset($config)) {
+                throw new \Exception('無效的配置鍵');
+            }
             $params = [
-                'Bucket' => $bucket,
+                'Bucket' => $config['bucket'],
             ];
             if ($prefix !== null) {
-                $params['Prefix'] = $prefix;
+                $params['Prefix'] = $config['root_path'] . $prefix;
             }
             $result = $client->listObjectsV2($params);
             $response->status = 'success';
             $response->objects = $result['Contents'];
         } catch (AwsException $e) {
+            $response->status = 'failure';
+            $response->message = $e->getMessage();
+        } catch (\Exception $e) {
             $response->status = 'failure';
             $response->message = $e->getMessage();
         }
@@ -59,23 +66,30 @@ class AWSS3Handler
      * 向存储桶中上传对象
      *
      * @param S3Client $client S3 客户端
-     * @param string $bucket 存储桶名称
-     * @param string $key 对象键
+     * @param string $bucketKey 存储桶配置鍵
+     * @param string $objectKey 对象键
      * @param string $source 源文件路径
      * @return \stdClass 返回包含上传结果或错误信息的响应对象
      */
-    public function putObject(S3Client $client, string $bucket, string $key, string $source): \stdClass
+    public function putObject(S3Client $client, string $bucketKey, string $objectKey, string $source): \stdClass
     {
         $response = new \stdClass();
         try {
+            $config = $this->getConfig($bucketKey);
+            if (!isset($config)) {
+                throw new \Exception('無效的配置鍵');
+            }
             $result = $client->putObject([
-                'Bucket' => $bucket,
-                'Key' => $key,
+                'Bucket' => $config['bucket'],
+                'Key' => $config['root_path'] . $objectKey,
                 'SourceFile' => $source,
             ]);
             $response->status = 'success';
             $response->object = $result['ObjectURL'];
         } catch (AwsException $e) {
+            $response->status = 'failure';
+            $response->message = $e->getMessage();
+        } catch (\Exception $e) {
             $response->status = 'failure';
             $response->message = $e->getMessage();
         }
@@ -86,20 +100,27 @@ class AWSS3Handler
      * 删除存储桶中的对象
      *
      * @param S3Client $client S3 客户端
-     * @param string $bucket 存储桶名称
-     * @param string $object 对象键
+     * @param string $bucketKey 存储桶配置鍵
+     * @param string $objectKey 对象键
      * @return \stdClass 返回包含删除结果或错误信息的响应对象
      */
-    public function deleteObject(S3Client $client, string $bucket, string $object): \stdClass
+    public function deleteObject(S3Client $client, string $bucketKey, string $objectKey): \stdClass
     {
         $response = new \stdClass();
         try {
+            $config = $this->getConfig($bucketKey);
+            if (!isset($config)) {
+                throw new \Exception('無效的配置鍵');
+            }
             $client->deleteObject([
-                'Bucket' => $bucket,
-                'Key' => $object,
+                'Bucket' => $config['bucket'],
+                'Key' => $config['root_path'] . $objectKey,
             ]);
             $response->status = 'success';
         } catch (AwsException $e) {
+            $response->status = 'failure';
+            $response->message = $e->getMessage();
+        } catch (\Exception $e) {
             $response->status = 'failure';
             $response->message = $e->getMessage();
         }
@@ -124,6 +145,26 @@ class AWSS3Handler
             return $config[$key] ?? null;
         }
         return $config;
+    }
+
+    /**
+     * 检查文件扩展名是否在白名单内
+     *
+     * @param string $key 配置键
+     * @param string $fileName 文件名
+     * @return bool 如果文件扩展名在白名单内返回 true，否则返回 false
+     */
+    public function isAllowedFileType(string $key, string $fileName): bool
+    {
+        // 从配置文件获取允许的文件扩展名
+        $config = $this->getConfig($key);
+        $allowedExtensions = $config['allowed_file'] ?? [];
+
+        // 获取文件扩展名
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        // 检查扩展名是否在允许的列表中
+        return in_array($fileExtension, $allowedExtensions, true);
     }
 }
 
