@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Jeffho\\HkAwsS3\\": "src/"
+            "Jeffho\\HkAwsS3\\": "hk-aws-s3/src/"
         }
     },
     "authors": [
@@ -17,5 +17,8 @@
             "email": "jeffho@weblisher.com.tw"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    }
 }
