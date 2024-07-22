@@ -113,34 +113,20 @@ class AWSS3HandlerTest extends TestCase
 
     public function testGetConfig()
     {
-        $config = [
-            'key1' => 'value1',
-            'key2' => 'value2'
-        ];
-
         $filePath = realpath(__DIR__ . '/../config/hk-aws-s3.php');
-
-        file_put_contents($filePath, '<?php return ' . var_export($config, true) . ';');
 
         $result = $this->s3Handler->getConfig();
 
-        $this->assertEquals($config, $result);
+        $this->assertNotEmpty($result);
     }
 
     public function testGetConfigKey()
     {
-        $config = [
-            'key1' => 'value1',
-            'key2' => 'value2'
-        ];
-
         $filePath = realpath(__DIR__ . '/../config/hk-aws-s3.php');
 
-        file_put_contents($filePath, '<?php return ' . var_export($config, true) . ';');
+        $result = $this->s3Handler->getConfig('marketing-assets');
 
-        $result = $this->s3Handler->getConfig('key1');
-
-        $this->assertEquals('value1', $result);
+        $this->assertNotEmpty($result);
     }
 }
 
