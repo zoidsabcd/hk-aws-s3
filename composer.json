@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Jeffho\\HkAwsS3\\": "hk-aws-s3/src/"
+            "Jeffho\\HkAwsS3\\": "src/"
         }
     },
     "authors": [
