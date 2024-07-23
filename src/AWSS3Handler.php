@@ -80,13 +80,14 @@ class AWSS3Handler
             if (!isset($config)) {
                 throw new \Exception('無效的配置鍵');
             }
+            $objectKey = $config['root_path'] . $objectKey;
             $result = $client->putObject([
                 'Bucket' => $config['bucket'],
-                'Key' => $config['root_path'] . $objectKey,
+                'Key' => $objectKey,
                 'SourceFile' => $source,
             ]);
             $response->status = 'success';
-            $response->object = $result['ObjectURL'];
+            $response->object = $objectKey;
         } catch (AwsException $e) {
             $response->status = 'failure';
             $response->message = $e->getMessage();
