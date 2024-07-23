@@ -7,6 +7,7 @@ use Aws\S3\S3Client;
 
 class AWSS3Handler
 {
+    const CDNURL = 'https://cloud.holkee.com';
     /**
      * 设置 S3 客户端
      *
@@ -161,6 +162,63 @@ class AWSS3Handler
 
         // 检查扩展名是否在允许的列表中
         return in_array($fileExtension, $allowedExtensions, true);
+    }
+
+    /**
+     * 获取对象的 URL
+     *
+     * @param string $type 类型
+     * @param string $source 源路径
+     * @param string|null $option 选项
+     * @return string 对象的 URL
+     */
+    public function getObjectUrl(string $type, string $source, string $option = null)
+    {
+        switch ($type) {
+            case 'carousel':
+            case 'latest_news':
+            case 'store_intro':
+            case 'service_item':
+                return self::CDNURL . '/' . $source;
+            case 'favicon':
+            case 'share':
+            case 'store_logo':
+                if (preg_match('/^(?:user-website-assets)\//i', $source)) {
+                    return self::CDNURL . '/' . $source;
+                } else {
+                    return $this->getOldBucketObjectUrl($type, $source, $option);
+                }
+            case 'product':
+                if (preg_match('/^(?:user-product-assets)\//i', $source)) {
+                    return self::CDNURL . '/' . $source;
+                } else {
+                    return $this->getOldBucketObjectUrl($type, $source, $option);
+                }
+            default:
+                return $this->getOldBucketObjectUrl($type, $source, $option);
+        }
+    }
+
+    /**
+     * 获取旧存储桶中对象的 URL
+     *
+     * @param string $type 类型
+     * @param string $source 源路径
+     * @param string|null $option 选项
+     * @return string 旧存储桶中对象的 URL
+     */
+    private function getOldBucketObjectUrl(string $type, string $source, string $option = null)
+    {
+        $oldCdn = 'https://img.holkee.com';
+        switch ($type) {
+            case 'favicon':
+                return $oldCdn . '/site/' . $option . 'icons/favicon-' . $source . '-32x32.png';
+            case 'share':
+            case 'store_log':
+            case 'product':
+            default:
+                return $oldCdn . '/' . $source;
+        }
     }
 }
 
