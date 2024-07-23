@@ -100,21 +100,17 @@ class AWSS3Handler
      * 删除存储桶中的对象
      *
      * @param S3Client $client S3 客户端
-     * @param string $bucketKey 存储桶配置鍵
+     * @param string $bucket 存储桶
      * @param string $objectKey 对象键
      * @return \stdClass 返回包含删除结果或错误信息的响应对象
      */
-    public function deleteObject(S3Client $client, string $bucketKey, string $objectKey): \stdClass
+    public function deleteObject(S3Client $client, string $bucket, string $objectKey): \stdClass
     {
         $response = new \stdClass();
         try {
-            $config = $this->getConfig($bucketKey);
-            if (!isset($config)) {
-                throw new \Exception('無效的配置鍵');
-            }
             $client->deleteObject([
-                'Bucket' => $config['bucket'],
-                'Key' => $config['root_path'] . $objectKey,
+                'Bucket' => $bucket,
+                'Key' => $objectKey
             ]);
             $response->status = 'success';
         } catch (AwsException $e) {
