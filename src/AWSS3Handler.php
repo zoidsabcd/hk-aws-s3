@@ -221,7 +221,7 @@ class AWSS3Handler
             case 'favicon':
                 return $oldCdn . '/site/' . $option . 'icons/favicon-' . $source . '-32x32.png';
             case 'share':
-            case 'store_log':
+            case 'store_logo':
             case 'product':
             default:
                 return $oldCdn . '/' . $source;
