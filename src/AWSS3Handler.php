@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * AWS S3 handle class for Holkee
+ *
+ * @author      Jeff Ho <jeffho@weblisher.com.tw>
+ * @access      public
+ * @version     Release: 1.0
+ */
 namespace Jeffho\HkAwsS3;
 
 use Aws\Exception\AwsException;
