@@ -186,6 +186,7 @@ class AWSS3Handler
             case 'latest_news':
             case 'store_intro':
             case 'service_item':
+            case 'marketing':
                 return self::CDNURL . '/' . $source;
             case 'favicon':
             case 'share':
