@@ -22,8 +22,8 @@ return [
 	*/
 	'marketing-assets' => [
 		'bucket' => 'holkee-marketing-assets',
-		'root_path' => 'marketing-assets/images/',
-		'allowed_file' => ['jpg', 'png']
+		'root_path' => 'marketing-assets/',
+		'allowed_file' => ['jpg', 'png', 'pdf']
 	],
 	/*
 	|--------------------------------------------------------------------------
