@@ -236,12 +236,12 @@ class AWSS3Handler
             // 定義正規表達式
             $pattern = '/(https?:)?\/\/img\.holkee\.com/';
             // 使用 preg_replace 進行替換
-            $result = preg_replace($pattern, 'images', $string);
+            $result = preg_replace($pattern, 'images', $source);
         } else {
             // 定義正規表達式
             $pattern = '/(https?:)?\/\/(cdn|cloud)\.holkee\.com\//';
             // 使用 preg_replace 進行替換
-            $result = preg_replace($pattern, '', $string);
+            $result = preg_replace($pattern, '', $source);
         }
         // 如果替換後的字串是以 'site/' 開頭，將其替換為 'image/site/'
         if (strpos($result, 'site/') === 0) {
