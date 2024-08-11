@@ -217,7 +217,8 @@ class AWSS3Handler
     public function getObjectBucket(string $objectKey)
     {
         $segments = explode('/', $objectKey);
-        $key = $segments[0];
+        $rootPath = $segments[0] . '/';
+        $key = $this->findKeyByRootPath($rootPath);
         // 取得配置文件
         $config = $this->getConfig($key);
         // 從配置文件取得儲存桶, 若設定檔沒有訊息, 則為舊儲存桶
@@ -307,6 +308,26 @@ class AWSS3Handler
             default:
                 return $oldCdn . '/' . $source;
         }
+    }
+
+    /**
+     * 根據指定的 root_path 尋找對應的陣列 key。
+     *
+     * @param string $rootPath 要尋找的 root_path 字串。
+     * @return string|null 找到的 key 或者 null 如果找不到。
+     */
+    private function findKeyByRootPath(string $rootPath): ?string {
+        $config = $this->getConfig();
+        // 使用 foreach 迭代陣列的每個項目
+        foreach ($config as $key => $value) {
+            // 檢查當前項目中是否有 'root_path' 且與指定的 $rootPath 相同
+            if (isset($value['root_path']) && $value['root_path'] === $rootPath) {
+                // 如果匹配，返回當前項目的 key
+                return $key;
+            }
+        }
+        // 如果沒有匹配的，返回 null
+        return null;
     }
 }
 
