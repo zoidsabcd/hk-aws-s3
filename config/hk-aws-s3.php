@@ -85,4 +85,14 @@ return [
 		'root_path' => 'user-website-assets/',
 		'allowed_file' => ['jpg', 'png']
 	],
+    /*
+	|--------------------------------------------------------------------------
+	| holkee 用戶多元預約素材庫
+	|--------------------------------------------------------------------------
+	*/
+	'user-appointed' => [
+		'bucket' => 'holkee-user-appointed-assets',
+		'root_path' => 'user-appointed-assets/',
+		'allowed_file' => ['jpg', 'png']
+	],
 ];

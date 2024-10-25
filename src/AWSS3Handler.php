@@ -268,6 +268,7 @@ class AWSS3Handler
             case 'store_intro':
             case 'service_item':
             case 'marketing':
+            case 'appointed':
                 return self::CDNURL . '/' . $source;
             case 'favicon':
             case 'share':
