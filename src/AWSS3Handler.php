@@ -269,6 +269,7 @@ class AWSS3Handler
             case 'service_item':
             case 'marketing':
             case 'appointed':
+            case 'official_theme':
                 return self::CDNURL . '/' . $source;
             case 'favicon':
             case 'share':

@@ -32,7 +32,7 @@ return [
 	*/
 	'official-theme' => [
 		'bucket' => 'holkee-official-theme-assets',
-		'root_path' => 'official-theme/',
+		'root_path' => 'official-theme-assets/',
 		'allowed_file' => ['jpg', 'png', 'svg', 'css', 'scss', 'map']
 	],
 	/*
