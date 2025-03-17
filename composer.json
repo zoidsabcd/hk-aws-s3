@@ -3,7 +3,7 @@
     "description": "A package for AWS S3 integration",
     "type": "library",
     "require": {
-        "aws/aws-sdk-php": "3.277.0"
+        "aws/aws-sdk-php": "^3.277.0"
     },
     "license": "MIT",
     "autoload": {
